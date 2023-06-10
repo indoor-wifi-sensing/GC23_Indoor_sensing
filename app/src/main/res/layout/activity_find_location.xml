@@ -43,4 +43,19 @@
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
+    <EditText
+        android:id="@+id/arrivalPos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="도착지"
+        />
+
+    <Button
+        android:id="@+id/moveAlgorithm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="move algorithm"
+        />
+
 </LinearLayout>

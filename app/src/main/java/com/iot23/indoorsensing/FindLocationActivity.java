@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,7 +50,9 @@ public class FindLocationActivity extends AppCompatActivity {
     BroadcastReceiver wifiScanReceiver;
 
     //레이아웃 컨트롤 관련 변수
-    Button scanBtn,submitBtn;
+    private String departurePos;
+    EditText arrivalText;
+    Button scanBtn,submitBtn, moveAlgo;
     ListView wifiList;
     List<ScanResult> wifiResult;
 
@@ -63,6 +66,9 @@ public class FindLocationActivity extends AppCompatActivity {
 
         scanBtn = findViewById(R.id.scanNow);
         submitBtn = findViewById(R.id.submitDB);
+        moveAlgo = findViewById(R.id.moveAlgorithm);
+
+        arrivalText = findViewById(R.id.arrivalPos);
 
         wifiList = findViewById(R.id.wifiList);
         wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
@@ -91,6 +97,23 @@ public class FindLocationActivity extends AppCompatActivity {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
         this.registerReceiver(wifiScanReceiver, intentFilter);
+
+        moveAlgo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String arrivalPos = arrivalText.getText().toString();
+
+                Bundle bundle = new Bundle();
+                bundle.putString("depart", departurePos);
+                bundle.putString("arrival", arrivalPos);
+
+                Intent intent = new Intent(getApplicationContext(), CalculateRouteActivity.class);
+                intent.putExtras(bundle);
+
+                Log.e("test", "I clicked!!!! 1트");
+                startActivity(intent);
+            }
+        });
 
         scanBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -241,6 +264,8 @@ public class FindLocationActivity extends AppCompatActivity {
 
                     textViewResponse.setText("Message: " + message + "\nReceived Data: " + receivedData);
                     txt.setText(Integer.toString(count));
+                    departurePos = receivedData;
+
                     count++;
                 } catch (JSONException e) {
                     e.printStackTrace();

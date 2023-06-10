@@ -26,4 +26,25 @@
         android:layout_height="wrap_content"
         android:text="1. 경로 정보 저장"/>
 
+    <TextView
+        android:id="@+id/outputLog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="test" />
+
+    <TextView
+        android:id="@+id/outputLog2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="test" />
+
+    <TextView
+        android:id="@+id/outputLog3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="test" />
+
 </LinearLayout>
