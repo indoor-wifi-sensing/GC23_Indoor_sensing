@@ -103,15 +103,18 @@ public class FindLocationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String arrivalPos = arrivalText.getText().toString();
 
+                if (departurePos == null) departurePos = "401";
+
                 Bundle bundle = new Bundle();
                 bundle.putString("depart", departurePos);
                 bundle.putString("arrival", arrivalPos);
 
-                Intent intent = new Intent(getApplicationContext(), CalculateRouteActivity.class);
+                Intent intent = new Intent(getApplicationContext(), SensorTest.class);
                 intent.putExtras(bundle);
 
                 condition = false;
                 Log.e("test", "I clicked!!!! 1트");
+
                 startActivity(intent);
             }
         });
@@ -121,6 +124,7 @@ public class FindLocationActivity extends AppCompatActivity {
 
         // 초기 실행을 위해 TimerTask를 바로 실행
         timerMTimer.schedule(new TimerTask() {
+            @SuppressLint("MissingPermission")
             @Override
             public void run() {
                 handler.post(new Runnable() {
