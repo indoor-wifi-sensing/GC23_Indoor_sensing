@@ -14,12 +14,12 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +37,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class FindLocationActivity extends AppCompatActivity {
 
@@ -52,9 +54,10 @@ public class FindLocationActivity extends AppCompatActivity {
     //레이아웃 컨트롤 관련 변수
     private String departurePos;
     EditText arrivalText;
-    Button scanBtn,submitBtn, moveAlgo;
-    ListView wifiList;
+    Button moveAlgo;
     List<ScanResult> wifiResult;
+
+    private boolean condition = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,13 +67,10 @@ public class FindLocationActivity extends AppCompatActivity {
         // 사용자에게 필요한 권한 요청
         permissionCheck();
 
-        scanBtn = findViewById(R.id.scanNow);
-        submitBtn = findViewById(R.id.submitDB);
         moveAlgo = findViewById(R.id.moveAlgorithm);
 
         arrivalText = findViewById(R.id.arrivalPos);
 
-        wifiList = findViewById(R.id.wifiList);
         wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 
         txt = findViewById(R.id.distance);
@@ -110,55 +110,105 @@ public class FindLocationActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), CalculateRouteActivity.class);
                 intent.putExtras(bundle);
 
+                condition = false;
                 Log.e("test", "I clicked!!!! 1트");
                 startActivity(intent);
             }
         });
 
-        scanBtn.setOnClickListener(new View.OnClickListener() {
+        Timer timerMTimer = new Timer(true);
+        Handler handler = new Handler();
+
+        // 초기 실행을 위해 TimerTask를 바로 실행
+        timerMTimer.schedule(new TimerTask() {
             @Override
-            public void onClick(View view) {
-                String[][] wifiData = new String[500][2];
-                int i = 0;
-                for (ScanResult choseWifi : wifiResult) {
-                    String MAC = choseWifi.BSSID;
-                    int rss = choseWifi.level;
-                    wifiData[i][0] = MAC;
-                    wifiData[i][1] = Integer.toString(rss);
-                    i++;
-                }
+            public void run() {
+                handler.post(new Runnable() {
+                    public void run() {
+                        if (condition) {
+                            // 여기에 실행할 코드 작성
+                            boolean success = wifiManager.startScan();
+                            if (!success) {
+                                scanFailure();
+                            }
+                            wifiResult = wifiManager.getScanResults();
 
-                Gson gson = new Gson();
-                String jsonWifiData = gson.toJson(wifiData); // converting wifiData to JSON format
+                            Comparator<ScanResult> comparator = new Comparator<ScanResult>() {
+                                @Override
+                                public int compare(ScanResult o1, ScanResult o2) {
+                                    return o2.level - o1.level;
+                                }
+                            };
+                            Collections.sort(wifiResult, comparator);
 
-                if (isNetworkAvailable()) {
-                    new SendDataTask().execute(jsonWifiData); // passing the json string instead of String array
-                } else {
-                    textViewResponse.setText("Network connection not available");
-                }
+                            String[][] wifiData = new String[500][2];
+                            int i = 0;
+                            for (ScanResult choseWifi : wifiResult) {
+                                String MAC = choseWifi.BSSID;
+                                int rss = choseWifi.level;
+                                wifiData[i][0] = MAC;
+                                wifiData[i][1] = Integer.toString(rss);
+                                i++;
+                            }
+
+                            Gson gson = new Gson();
+                            String jsonWifiData = gson.toJson(wifiData); // converting wifiData to JSON format
+
+                            if (isNetworkAvailable()) {
+                                new SendDataTask().execute(jsonWifiData); // passing the json string instead of String array
+                            } else {
+                                textViewResponse.setText("Network connection not available");
+                            }
+                        }
+                    }
+                });
             }
-        });
+        }, 0);
 
-        submitBtn.setOnClickListener(new View.OnClickListener() {
+        timerMTimer.schedule(new TimerTask() {
             @SuppressLint("MissingPermission")
             @Override
-            public void onClick(View v) {
-                boolean success = wifiManager.startScan();
-                if (!success) {
-                    scanFailure();
-                }
-                wifiResult = wifiManager.getScanResults();
+            public void run() {
+                handler.post(new Runnable(){
+                    public void run(){
+                        if(condition) {
+                            boolean success = wifiManager.startScan();
+                            if (!success) {
+                                scanFailure();
+                            }
+                            wifiResult = wifiManager.getScanResults();
 
-                Comparator<ScanResult> comparator = new Comparator<ScanResult>() {
-                    @Override
-                    public int compare(ScanResult o1, ScanResult o2) {
-                        return o2.level - o1.level;
+                            Comparator<ScanResult> comparator = new Comparator<ScanResult>() {
+                                @Override
+                                public int compare(ScanResult o1, ScanResult o2) {
+                                    return o2.level - o1.level;
+                                }
+                            };
+                            Collections.sort(wifiResult, comparator);
+
+                            String[][] wifiData = new String[500][2];
+                            int i = 0;
+                            for (ScanResult choseWifi : wifiResult) {
+                                String MAC = choseWifi.BSSID;
+                                int rss = choseWifi.level;
+                                wifiData[i][0] = MAC;
+                                wifiData[i][1] = Integer.toString(rss);
+                                i++;
+                            }
+
+                            Gson gson = new Gson();
+                            String jsonWifiData = gson.toJson(wifiData); // converting wifiData to JSON format
+
+                            if (isNetworkAvailable()) {
+                                new SendDataTask().execute(jsonWifiData); // passing the json string instead of String array
+                            } else {
+                                textViewResponse.setText("Network connection not available");
+                            }
+                        }
                     }
-                };
-                Collections.sort(wifiResult, comparator);
+                });
             }
-        });
-
+        }, 10000, 10000);
     }
 
     //===========================================
@@ -177,7 +227,6 @@ public class FindLocationActivity extends AppCompatActivity {
             String completeInfo = mac + " | " + dbm + " | " + freq;
             list.add(completeInfo);
         }
-        wifiList.setAdapter(adapter);
     }
 
     //Wifi 정보 스캔에 성공했을 경우에 행동할 것들
@@ -220,7 +269,7 @@ public class FindLocationActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             try {
-                String urlString = "http://172.16.237.123:5000/api";
+                String urlString = "http://172.30.1.13:5000/api";
                 URL url = new URL(urlString);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
@@ -230,6 +279,8 @@ public class FindLocationActivity extends AppCompatActivity {
                 // 요청 데이터 생성
                 JSONObject jsonParam = new JSONObject();
                 jsonParam.put("data", params[0]);
+
+                Log.d("wifi", jsonParam.toString());
 
                 // 요청 데이터 전송
                 OutputStream os = conn.getOutputStream();
