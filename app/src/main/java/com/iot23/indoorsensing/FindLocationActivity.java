@@ -103,14 +103,15 @@ public class FindLocationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String arrivalPos = arrivalText.getText().toString();
 
+                if (departurePos == null) departurePos = "401";
+
                 Bundle bundle = new Bundle();
                 bundle.putString("depart", departurePos);
                 bundle.putString("arrival", arrivalPos);
 
-                Intent intent = new Intent(getApplicationContext(), CalculateRouteActivity.class);
+                Intent intent = new Intent(getApplicationContext(), Navigator.class);
                 intent.putExtras(bundle);
 
-                Log.e("test", "I clicked!!!! 1트");
                 startActivity(intent);
             }
         });
