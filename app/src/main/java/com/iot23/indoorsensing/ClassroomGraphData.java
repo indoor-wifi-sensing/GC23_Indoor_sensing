@@ -53,6 +53,7 @@ public class ClassroomGraphData {
             this.data.addVertex("409");
             this.data.addVertex("410");
             this.data.addVertex("411");
+            this.data.addVertex("artechne4f");
         }
         {
             this.data.addVertex("501");
@@ -94,12 +95,14 @@ public class ClassroomGraphData {
             this.data.addVertex("between5FC2");
             this.data.addVertex("between5FC3");
             this.data.addVertex("betweenIH");
+            this.data.addVertex("artechne5f");
         }
         // ...노가다...
 
         // 각 노드의 연결점
         {
-            this.data.addEdge("425", "426", 6);
+            this.data.addEdge("artechne4f", "425", 3);
+            this.data.addEdge("artechne4f", "426", 3);
             this.data.addEdge("426", "427", 4);
             this.data.addEdge("427", "428", 3);
             this.data.addEdge("428", "429", 3);
@@ -144,6 +147,8 @@ public class ClassroomGraphData {
             this.data.addEdge("410", "411", 6);
         }
         {
+            this.data.addEdge("artechne5f", "525", 3);
+            this.data.addEdge("artechne5f", "526", 3);
             this.data.addEdge("526", "527", 5);
             this.data.addEdge("527", "528", 5);
             this.data.addEdge("528", "529", 5);
@@ -158,7 +163,6 @@ public class ClassroomGraphData {
             this.data.addEdge("504", "505", 12);
             this.data.addEdge("505", "506", 5);
             this.data.addEdge("506", "507", 5);
-            this.data.addEdge("526", "525", 5);
             this.data.addEdge("525", "524", 6);
             this.data.addEdge("524", "523", 6);
             this.data.addEdge("523", "522", 4);
@@ -189,8 +193,11 @@ public class ClassroomGraphData {
             this.data.addEdge("betweenIH", "515", 10);
         }
         {
-            this.data.addEdge("stairsAlpha", "stairsAlpha_1", 20);
-            this.data.addEdge("stairsBeta", "stairsBeta_1", 20);
+            this.data.addEdge("stairsAlpha", "stairsAlpha_1", 7);
+            this.data.addEdge("stairsBeta", "stairsBeta_1", 7);
+            this.data.addEdge("408", "508", 7);
+            this.data.addEdge("artechne4f", "artechne5f", 7);
+
         }
 
         return this.data;

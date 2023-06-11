@@ -9,7 +9,7 @@ public class NextDirection {
     }
 
     String[][] groupAlpha4f = {
-            {"A", "3"},
+            {"artechne4f", "3"},
             {"426", "6"},
             {"427", "10"},
             {"428", "13"},
@@ -32,7 +32,7 @@ public class NextDirection {
             {"G", "90"}
     };
     String[][] groupBeta4f = {
-            {"A", "0"},
+            {"artechne4f", "0"},
             {"425", "2"},
             {"424", "4"},
             {"423", "8"},
@@ -80,7 +80,7 @@ public class NextDirection {
             {"D", "27"}
     };
     String[][] groupAlpha5f = {
-            {"A", "0"},
+            {"artechne5f", "0"},
             {"526", "5"},
             {"527", "10"},
             {"528", "15"},
@@ -101,7 +101,7 @@ public class NextDirection {
             {"G", "90"}
     };
     String[][] groupBeta5f = {
-            {"A", "0"},
+            {"artechne5f", "0"},
             {"525", "5"},
             {"524", "11"},
             {"523", "17"},
