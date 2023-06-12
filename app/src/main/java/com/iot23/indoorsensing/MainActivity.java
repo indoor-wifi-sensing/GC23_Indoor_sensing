@@ -261,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             try {
-                String urlString = "http://172.30.1.13:5000/api";
+                String urlString = "http://172.16.228.173:5000/api";
                 URL url = new URL(urlString);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");

@@ -101,7 +101,21 @@ public class SensorTest extends Activity implements SensorEventListener {
 
         ClassroomGraphData dataGetHelp = new ClassroomGraphData();
         classInfo = dataGetHelp.inputData();
-        starts = starts.split("호")[0];
+        if(starts.equals("411호쪽 계단실")) starts = "411";
+        else if(starts.equals("416호쪽 계단실")) starts = "stairsBeta_1";
+        else if(starts.equals("401쪽 계단실")) starts = "stairsAlpha_1";
+        else if(starts.equals("아르테크네쪽 엘레베이터") || starts.equals("4층 아르테크네") || starts.equals("아르테크네쪽 엘레베이터")) starts = "artechne4f";
+        else if(starts.equals("418호쪽 엘레베이터")) starts = "418";
+        else if(starts.equals("409호쪽 엘레베이터")) starts = "409";
+        else if(starts.equals("5층 아르테크네")) starts = "artechne5f";
+        else if(starts.equals("C-CUBE SQUARE")) starts = "betweenIH";
+        else if(starts.equals("510호 앞 엘리베이터")) starts = "510";
+        else if(starts.equals("520호 앞 엘리베이터")) starts = "520";
+        else if(starts.equals("526호 옆 엘리베이터")) starts = "526";
+        else if(starts.equals("501호 옆 계단실")) starts = "stairsAlpha";
+        else if(starts.equals("511호 옆 계단실")) starts = "511";
+        else if(starts.equals("519호 옆 계단실")) starts = "stairsBeta";
+        else starts = starts.split("호")[0];
 
         List<String> shortestPath = classInfo.getShortestPath(starts, ends);
 
@@ -169,13 +183,18 @@ public class SensorTest extends Activity implements SensorEventListener {
                             startsTxt.setText(starts + "호");
                             endsTxt.setText(ends + "호");
 
+                            if (isNumeric(starts) && isNumeric(ends)) {
+                                int a = Integer.parseInt(starts) - Integer.parseInt(ends);
+                                if (a < 0) a = -a;
+                                if (a < 3) Toast.makeText(getApplicationContext(), "근처에 도착", Toast.LENGTH_SHORT).show();
+                            }
                             // 만약 위치가 하나 차이나거나 차이가 없을 경우 도착 메세지 리턴
                             if (shortestPath.size() <= 2) {
                                 Toast.makeText(getApplicationContext(), "Arrive to target position", Toast.LENGTH_SHORT).show();
                                 return;
                             }
                             NextDirection eee = new NextDirection();
-                            int finalDirection = eee.getDirection(shortestPath.get(0), shortestPath.get(1));
+                            int finalDirection = eee.getDirection(shortestPath1.get(0), shortestPath1.get(1));
                             if (finalDirection == 1002) {
                                 Toast.makeText(getApplicationContext(), "Use stair Now", Toast.LENGTH_SHORT).show();
                             }
@@ -188,7 +207,7 @@ public class SensorTest extends Activity implements SensorEventListener {
                     }
                 });
             }
-        }, 10000, 10000);
+        }, 3000, 2500);
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         rotationVectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
@@ -231,6 +250,7 @@ public class SensorTest extends Activity implements SensorEventListener {
             float azimuthInDegrees = (float) Math.toDegrees(azimuthInRadians);
 
             float azimuthInDegreesWithOffset = -azimuthInDegrees - targetDegree;  // 목표 방위각을 적용하여 회전
+            azimuthInDegreesWithOffset = azimuthInDegreesWithOffset % 360;
 
             // 방위각이 음수인 경우에 대한 처리
             if (azimuthInDegreesWithOffset < 0) {
@@ -308,6 +328,7 @@ public class SensorTest extends Activity implements SensorEventListener {
             float azimuthInDegrees = (float) Math.toDegrees(azimuthInRadians);
 
             float azimuthInDegreesWithOffset = -azimuthInDegrees - targetDegree;  // 목표 방위각을 적용하여 회전
+            azimuthInDegreesWithOffset = azimuthInDegreesWithOffset % 360;
 
             // 방위각이 음수인 경우에 대한 처리
             if (azimuthInDegreesWithOffset < 0) {
@@ -393,7 +414,7 @@ public class SensorTest extends Activity implements SensorEventListener {
         @Override
         protected String doInBackground(String... params) {
             try {
-                String urlString = "http://172.30.1.13:5000/api";
+                String urlString = "http://172.16.228.173:5000/api";
                 URL url = new URL(urlString);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
@@ -437,7 +458,25 @@ public class SensorTest extends Activity implements SensorEventListener {
                     String message = jsonResponse.getString("message");
                     String receivedData = jsonResponse.getString("received_data");
 
-                    starts = receivedData.split("호")[0];
+                    String temp = starts;
+                    starts = receivedData;
+
+                    if(starts.equals("411호쪽 계단실")) starts = "411";
+                    else if(starts.equals("416호쪽 계단실")) starts = "stairsBeta_1";
+                    else if(starts.equals("401쪽 계단실")) starts = "stairsAlpha_1";
+                    else if(starts.equals("아르테크네쪽 엘레베이터") || starts.equals("4층 아르테크네") || starts.equals("아르테크네쪽 엘레베이터")) starts = "artechne4f";
+                    else if(starts.equals("418호쪽 엘레베이터")) starts = "418";
+                    else if(starts.equals("409호쪽 엘레베이터")) starts = "409";
+                    else if(starts.equals("5층 아르테크네")) starts = "artechne5f";
+                    else if(starts.equals("C-CUBE SQUARE")) starts = "betweenIH";
+                    else if(starts.equals("510호 앞 엘리베이터")) starts = "510";
+                    else if(starts.equals("520호 앞 엘리베이터")) starts = "520";
+                    else if(starts.equals("526호 옆 엘리베이터")) starts = "526";
+                    else if(starts.equals("501호 옆 계단실")) starts = "stairsAlpha";
+                    else if(starts.equals("511호 옆 계단실")) starts = "511";
+                    else if(starts.equals("519호 옆 계단실")) starts = "stairsBeta";
+                    else if(starts.equals("cannot find your position")) starts = temp;
+                    else starts = starts.split("호")[0];
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -446,6 +485,11 @@ public class SensorTest extends Activity implements SensorEventListener {
             }
         }
     }
+
+    private static boolean isNumeric(String str){
+        return str != null && str.matches("[0-9.]+");
+    }
+
 
 }
 
