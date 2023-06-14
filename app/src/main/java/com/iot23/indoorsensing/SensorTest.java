@@ -216,7 +216,7 @@ public class SensorTest extends Activity implements SensorEventListener {
                     }
                 });
             }
-        }, 10000, 10000);
+        }, 5000, 5000);
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         rotationVectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
@@ -260,24 +260,28 @@ public class SensorTest extends Activity implements SensorEventListener {
             float azimuthInRadians = orientationAngles[0];
             float azimuthInDegrees = (float) Math.toDegrees(azimuthInRadians);
 
-            float azimuthInDegreesWithOffset = -azimuthInDegrees - targetDegree;  // 목표 방위각을 적용하여 회전
+            float azimuthInDegreesWithOffset = -azimuthInDegrees;  // 목표 방위각을 적용하여 회전
             azimuthInDegreesWithOffset = azimuthInDegreesWithOffset % 360;
 
             // 방위각이 음수인 경우에 대한 처리
             if (azimuthInDegreesWithOffset < 0) {
                 azimuthInDegreesWithOffset += 360f;
             }
+            azimuthInDegreesWithOffset -= targetDegree;
+
+            // 각도를 60도 범위 내에서 중간 값으로 고정
+            float fixedDegree = Math.round(azimuthInDegreesWithOffset / 60f) * 60f;
 
             RotateAnimation rotateAnimation = new RotateAnimation(
                     currentDegree,
-                    azimuthInDegreesWithOffset,
+                    fixedDegree,
                     Animation.RELATIVE_TO_SELF, 0.5f,
                     Animation.RELATIVE_TO_SELF, 0.5f);
             rotateAnimation.setDuration(250);
             rotateAnimation.setFillAfter(true);
 
             compassImage.startAnimation(rotateAnimation);
-            currentDegree = azimuthInDegreesWithOffset;  // 현재 각도를 업데이트
+            currentDegree = fixedDegree;  // 현재 각도를 업데이트
 
             String heading = "현재 방향: " + Math.round(currentDegree) + "도";
             headingText.setText(heading);
@@ -338,24 +342,28 @@ public class SensorTest extends Activity implements SensorEventListener {
             float azimuthInRadians = orientation[0];
             float azimuthInDegrees = (float) Math.toDegrees(azimuthInRadians);
 
-            float azimuthInDegreesWithOffset = -azimuthInDegrees - targetDegree;  // 목표 방위각을 적용하여 회전
+            float azimuthInDegreesWithOffset = -azimuthInDegrees;  // 목표 방위각을 적용하여 회전
             azimuthInDegreesWithOffset = azimuthInDegreesWithOffset % 360;
 
             // 방위각이 음수인 경우에 대한 처리
             if (azimuthInDegreesWithOffset < 0) {
                 azimuthInDegreesWithOffset += 360f;
             }
+            azimuthInDegreesWithOffset -= targetDegree;
+
+            // 각도를 60도 범위 내에서 중간 값으로 고정
+            float fixedDegree = Math.round(azimuthInDegreesWithOffset / 60f) * 60f;
 
             RotateAnimation rotateAnimation = new RotateAnimation(
                     currentDegree,
-                    azimuthInDegreesWithOffset,
+                    fixedDegree,
                     Animation.RELATIVE_TO_SELF, 0.5f,
                     Animation.RELATIVE_TO_SELF, 0.5f);
             rotateAnimation.setDuration(250);
             rotateAnimation.setFillAfter(true);
 
             compassImage.startAnimation(rotateAnimation);
-            currentDegree = azimuthInDegreesWithOffset;  // 현재 각도를 업데이트
+            currentDegree = fixedDegree;  // 현재 각도를 업데이트
 
             String heading = "현재 방향: " + Math.round(currentDegree) + "도";
             headingText.setText(heading);
@@ -424,7 +432,7 @@ public class SensorTest extends Activity implements SensorEventListener {
         @Override
         protected String doInBackground(String... params) {
             try {
-                String urlString = "http://172.16.226.121:5000/api";
+                String urlString = "http://172.16.233.62:5000/api";
                 URL url = new URL(urlString);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");

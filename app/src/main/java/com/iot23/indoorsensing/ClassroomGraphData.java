@@ -135,12 +135,32 @@ public class ClassroomGraphData {
             this.data.addEdge("414", "413", 10);
             this.data.addEdge("413", "412", 10);
             this.data.addEdge("412", "411", 10);
-            this.data.addEdge("434", "betweenEB", 10);
-            this.data.addEdge("betweenEB", "418", 10);
+
+            // betweenEB 범위 넓히기
+//            this.data.addEdge("431", "betweenEB", 10);
+//            this.data.addEdge("432", "betweenEB", 10);
+//            this.data.addEdge("433", "betweenEB", 10);
+            this.data.addEdge("434", "betweenEB", 10); //오리지널은 이거 왼쪽 한줄
+//            this.data.addEdge("435", "betweenEB", 10);
+//            this.data.addEdge("436", "betweenEB", 10);
+
+            // betweenEB 범위 넓히기
+//            this.data.addEdge("betweenEB", "416", 10);
+//            this.data.addEdge("betweenEB", "417", 10);
+            this.data.addEdge("betweenEB", "418", 10); //오리지널은 이거 왼쪽 한줄
+//            this.data.addEdge("betweenEB", "419", 10);
+//            this.data.addEdge("betweenEB", "420", 10);
+
+
             this.data.addEdge("405", "betweenFC1", 6);
             this.data.addEdge("betweenFC1", "betweenFC2", 8);
             this.data.addEdge("betweenFC2", "betweenFC3", 8);
-            this.data.addEdge("betweenFC3", "412", 8);
+
+            // betweenFC3 범휘 넓히기
+            this.data.addEdge("betweenFC3", "412", 8); //오리지널은 이거 왼쪽 한줄
+//            this.data.addEdge("betweenFC3", "413", 8);
+
+
             this.data.addEdge("407", "408", 7);
             this.data.addEdge("408", "409", 7);
             this.data.addEdge("409", "410", 7);
