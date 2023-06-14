@@ -133,6 +133,7 @@ public class SensorTest extends Activity implements SensorEventListener {
             Toast.makeText(getApplicationContext(), "Error for return", Toast.LENGTH_SHORT).show();
         }
         directionTxt.setText(finalDirection + "도");
+        targetDegree = 180f;
         targetDegree -= finalDirection;
 
         Timer timerMTimer = new Timer(true);
@@ -145,7 +146,6 @@ public class SensorTest extends Activity implements SensorEventListener {
                 handler.post(new Runnable(){
                     public void run(){
                         if(condition) {
-                            targetDegree = 180f;
                             boolean success = wifiManager.startScan();
                             if (!success) {
                                 scanFailure();
@@ -209,6 +209,7 @@ public class SensorTest extends Activity implements SensorEventListener {
                                 }
                                 directionTxt.setText(finalDirection + "도");
                                 distanceTxt.setText(shortestPath1.toString());
+                                targetDegree = 180f;
                                 targetDegree -= finalDirection;
 
                             }
@@ -260,24 +261,28 @@ public class SensorTest extends Activity implements SensorEventListener {
             float azimuthInRadians = orientationAngles[0];
             float azimuthInDegrees = (float) Math.toDegrees(azimuthInRadians);
 
-            float azimuthInDegreesWithOffset = -azimuthInDegrees - targetDegree;  // 목표 방위각을 적용하여 회전
+            float azimuthInDegreesWithOffset = -azimuthInDegrees;  // 목표 방위각을 적용하여 회전
             azimuthInDegreesWithOffset = azimuthInDegreesWithOffset % 360;
 
             // 방위각이 음수인 경우에 대한 처리
             if (azimuthInDegreesWithOffset < 0) {
                 azimuthInDegreesWithOffset += 360f;
             }
+            azimuthInDegreesWithOffset -= targetDegree;
+
+            // 각도를 60도 범위 내에서 중간 값으로 고정
+            float fixedDegree = Math.round(azimuthInDegreesWithOffset / 60f) * 60f;
 
             RotateAnimation rotateAnimation = new RotateAnimation(
                     currentDegree,
-                    azimuthInDegreesWithOffset,
+                    fixedDegree,
                     Animation.RELATIVE_TO_SELF, 0.5f,
                     Animation.RELATIVE_TO_SELF, 0.5f);
             rotateAnimation.setDuration(250);
             rotateAnimation.setFillAfter(true);
 
             compassImage.startAnimation(rotateAnimation);
-            currentDegree = azimuthInDegreesWithOffset;  // 현재 각도를 업데이트
+            currentDegree = fixedDegree;  // 현재 각도를 업데이트
 
             String heading = "현재 방향: " + Math.round(currentDegree) + "도";
             headingText.setText(heading);
@@ -338,24 +343,28 @@ public class SensorTest extends Activity implements SensorEventListener {
             float azimuthInRadians = orientation[0];
             float azimuthInDegrees = (float) Math.toDegrees(azimuthInRadians);
 
-            float azimuthInDegreesWithOffset = -azimuthInDegrees - targetDegree;  // 목표 방위각을 적용하여 회전
+            float azimuthInDegreesWithOffset = -azimuthInDegrees;  // 목표 방위각을 적용하여 회전
             azimuthInDegreesWithOffset = azimuthInDegreesWithOffset % 360;
 
             // 방위각이 음수인 경우에 대한 처리
             if (azimuthInDegreesWithOffset < 0) {
                 azimuthInDegreesWithOffset += 360f;
             }
+            azimuthInDegreesWithOffset -= targetDegree;
+
+            // 각도를 60도 범위 내에서 중간 값으로 고정
+            float fixedDegree = Math.round(azimuthInDegreesWithOffset / 60f) * 60f;
 
             RotateAnimation rotateAnimation = new RotateAnimation(
                     currentDegree,
-                    azimuthInDegreesWithOffset,
+                    fixedDegree,
                     Animation.RELATIVE_TO_SELF, 0.5f,
                     Animation.RELATIVE_TO_SELF, 0.5f);
             rotateAnimation.setDuration(250);
             rotateAnimation.setFillAfter(true);
 
             compassImage.startAnimation(rotateAnimation);
-            currentDegree = azimuthInDegreesWithOffset;  // 현재 각도를 업데이트
+            currentDegree = fixedDegree;  // 현재 각도를 업데이트
 
             String heading = "현재 방향: " + Math.round(currentDegree) + "도";
             headingText.setText(heading);
