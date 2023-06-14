@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.hardware.SensorManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
@@ -202,6 +203,61 @@ public class MainActivity extends AppCompatActivity {
         }, 10000, 10000);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        condition = true;
+        Timer timerMTimer = new Timer(true);
+        Handler handler = new Handler();
+
+        // 초기 실행을 위해 TimerTask를 바로 실행
+        timerMTimer.schedule(new TimerTask() {
+            @SuppressLint("MissingPermission")
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    public void run() {
+                        if (condition) {
+                            // 여기에 실행할 코드 작성
+                            boolean success = wifiManager.startScan();
+                            if (!success) {
+                                scanFailure();
+                            }
+                            wifiResult = wifiManager.getScanResults();
+
+                            Comparator<ScanResult> comparator = new Comparator<ScanResult>() {
+                                @Override
+                                public int compare(ScanResult o1, ScanResult o2) {
+                                    return o2.level - o1.level;
+                                }
+                            };
+                            Collections.sort(wifiResult, comparator);
+
+                            String[][] wifiData = new String[500][2];
+                            int i = 0;
+                            for (ScanResult choseWifi : wifiResult) {
+                                String MAC = choseWifi.BSSID;
+                                int rss = choseWifi.level;
+                                wifiData[i][0] = MAC;
+                                wifiData[i][1] = Integer.toString(rss);
+                                i++;
+                            }
+
+                            Gson gson = new Gson();
+                            String jsonWifiData = gson.toJson(wifiData); // converting wifiData to JSON format
+
+                            if (isNetworkAvailable()) {
+                                new SendDataTask().execute(jsonWifiData); // passing the json string instead of String array
+                            } else {
+                                curLoc.setText("Network connection not available");
+                            }
+                        }
+                    }
+                });
+            }
+        }, 0);
+
+    }
 
     //===========================================
     //========== WiFi 스캐닝 컨트롤 영역 ===========
@@ -232,7 +288,6 @@ public class MainActivity extends AppCompatActivity {
     private void scanFailure() {
         @SuppressLint("MissingPermission") List<ScanResult> results = wifiManager.getScanResults();
         Log.e("wifi", results.toString());
-        Toast.makeText(this.getApplicationContext(), "Wifi Scan Failure, Old Information may appear.", Toast.LENGTH_LONG).show();
     }
 
     private void permissionCheck() {
@@ -261,7 +316,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             try {
-                String urlString = "http://172.16.228.173:5000/api";
+                String urlString = "http://172.16.226.121:5000/api";
                 URL url = new URL(urlString);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");

@@ -161,13 +161,13 @@ public class NextDirection {
         // 3. 층 이동이 있으면 방위각 대신 계단을 이용하라는 신호
         // 리턴값 1001 : 에러 // 리턴값 1002 : 계단 사용
         HashMap<String, Integer> groupDegree = new HashMap<>();
-        groupDegree.put("4A", 65);
-        groupDegree.put("4B", 90);
+        groupDegree.put("4A", 55);
+        groupDegree.put("4B", 100);
         groupDegree.put("4C", 180);
         groupDegree.put("4D", 180);
         groupDegree.put("4E", 180);
-        groupDegree.put("5A", 65);
-        groupDegree.put("5B", 90);
+        groupDegree.put("5A", 55);
+        groupDegree.put("5B", 100);
         groupDegree.put("5C", 180);
         groupDegree.put("5D", 180);
         groupDegree.put("5E", 180);
@@ -246,81 +246,81 @@ public class NextDirection {
 
         // 4층일 때의 교점
         if (ss1.getKey().equals("4A")) {
-            if (ss2.getKey().equals("4B")) return 90;
+            if (ss2.getKey().equals("4B")) return 100;
             else return 180;
         }
         if (ss1.getKey().equals("4B")) {
-            if (ss2.getKey().equals("4A")) return 65;
+            if (ss2.getKey().equals("4A")) return 55;
             else return 0;
         }
         if (ss1.getKey().equals("4C")) {
             if (ss2.getKey().equals("4A")) {
-                if (ss2.getValue() < 32) return 65+180;
-                else return 65;
+                if (ss2.getValue() < 32) return 55+180;
+                else return 55;
             }
             else {
-                if (ss2.getValue() < 32) return 270;
-                else return 90;
+                if (ss2.getValue() < 32) return 260;
+                else return 100;
             }
         }
         if (ss1.getKey().equals("4D")) {
             if (ss2.getKey().equals("4A")) {
-                if (ss2.getValue() < 80) return 65+180;
-                else return 65;
+                if (ss2.getValue() < 80) return 55+180;
+                else return 55;
             }
             else {
-                if (ss2.getValue() < 70) return 270;
-                else return 90;
+                if (ss2.getValue() < 70) return 260;
+                else return 100;
             }
         }
         if (ss1.getKey().equals("4E")) {
-            if (ss2.getKey().equals("4A")) return 65+180;
-            else return 270;
+            if (ss2.getKey().equals("4A")) return 55+180;
+            else return 260;
         }
 
         // 5층일 때의 교점
         if (ss1.getKey().equals("5A")) {
-            if (ss2.getKey().equals("5B")) return 90;
+            if (ss2.getKey().equals("5B")) return 100;
             else if (ss2.getKey().equals("5F")) return 150;
             else return 180;
         }
         if (ss1.getKey().equals("5B")) {
-            if (ss2.getKey().equals("5A")) return 65;
+            if (ss2.getKey().equals("5A")) return 55;
             else if (ss2.getKey().equals("5F")) return 150+180;
             else return 0;
         }
         if (ss1.getKey().equals("5C")) {
             if (ss2.getKey().equals("5A")) {
-                if (ss2.getValue() < 32) return 65+180;
-                else return 65;
+                if (ss2.getValue() < 32) return 55+180;
+                else return 55;
             }
             else {
-                if (ss2.getValue() < 29) return 270;
-                else return 90;
+                if (ss2.getValue() < 29) return 260;
+                else return 100;
             }
         }
         if (ss1.getKey().equals("5D")) {
             if (ss2.getKey().equals("5A")) {
-                if (ss2.getValue() < 80) return 65+180;
-                else return 65;
+                if (ss2.getValue() < 80) return 55+180;
+                else return 55;
             }
             else {
-                if (ss2.getValue() < 75) return 270;
-                else return 90;
+                if (ss2.getValue() < 75) return 260;
+                else return 100;
             }
         }
         if (ss1.getKey().equals("5E")) {
-            if (ss2.getKey().equals("5A")) return 65+180;
-            else return 270;
+            if (ss2.getKey().equals("5A")) return 55+180;
+            else return 260;
         }
         if (ss1.getKey().equals("5F")) {
             if (ss2.getKey().equals("5A")) {
-                if (ss2.getValue() < 53) return 65+180;
-                else return 65;
+                if (ss2.getValue() < 53) return 55+180;
+                else return 55;
             }
             else {
-                if (ss2.getValue() < 61) return 270;
-                else return 90;
+                if (ss2.getValue() < 61) return 260;
+                else return 100;
             }
         }
 

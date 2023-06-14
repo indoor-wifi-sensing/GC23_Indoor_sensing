@@ -183,31 +183,39 @@ public class SensorTest extends Activity implements SensorEventListener {
                             startsTxt.setText(starts + "호");
                             endsTxt.setText(ends + "호");
 
-                            if (isNumeric(starts) && isNumeric(ends)) {
-                                int a = Integer.parseInt(starts) - Integer.parseInt(ends);
-                                if (a < 0) a = -a;
-                                if (a < 3) Toast.makeText(getApplicationContext(), "근처에 도착", Toast.LENGTH_SHORT).show();
-                            }
                             // 만약 위치가 하나 차이나거나 차이가 없을 경우 도착 메세지 리턴
                             if (shortestPath.size() <= 2) {
                                 Toast.makeText(getApplicationContext(), "Arrive to target position", Toast.LENGTH_SHORT).show();
                                 return;
                             }
                             NextDirection eee = new NextDirection();
-                            int finalDirection = eee.getDirection(shortestPath1.get(0), shortestPath1.get(1));
-                            if (finalDirection == 1002) {
-                                Toast.makeText(getApplicationContext(), "Use stair Now", Toast.LENGTH_SHORT).show();
+                            if(shortestPath1.size() == 1) {
+                                Toast.makeText(getApplicationContext(), "목적지 도착", Toast.LENGTH_SHORT).show();
+                                finish();
+                                onDestroy();
                             }
-                            else if (finalDirection == 1001) {
-                                Toast.makeText(getApplicationContext(), "Error for return", Toast.LENGTH_SHORT).show();
+                            if (isNumeric(starts) && isNumeric(ends)) {
+                                int a = Integer.parseInt(starts) - Integer.parseInt(ends);
+                                if (a < 0) a = -a;
+                                if (a < 3) Toast.makeText(getApplicationContext(), "근처에 도착", Toast.LENGTH_SHORT).show();
                             }
-                            directionTxt.setText(finalDirection + "도");
-                            targetDegree -= finalDirection;
+                            else {
+                                int finalDirection = eee.getDirection(shortestPath1.get(0), shortestPath1.get(1));
+                                if (finalDirection == 1002) {
+                                    Toast.makeText(getApplicationContext(), "Use stair Now", Toast.LENGTH_SHORT).show();
+                                }
+                                else if (finalDirection == 1001) {
+                                    Toast.makeText(getApplicationContext(), "Error for return", Toast.LENGTH_SHORT).show();
+                                }
+                                directionTxt.setText(finalDirection + "도");
+                                targetDegree -= finalDirection;
+
+                            }
                         }
                     }
                 });
             }
-        }, 3000, 2500);
+        }, 10000, 10000);
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         rotationVectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
@@ -231,6 +239,8 @@ public class SensorTest extends Activity implements SensorEventListener {
 
     @Override
     public void onDestroy( ) {
+        onPause();
+        onStop();
         super.onDestroy( );
         condition = false;
     }
@@ -385,7 +395,6 @@ public class SensorTest extends Activity implements SensorEventListener {
     private void scanFailure() {
         @SuppressLint("MissingPermission") List<ScanResult> results = wifiManager.getScanResults();
         Log.e("wifi", results.toString());
-        Toast.makeText(this.getApplicationContext(), "Wifi Scan Failure, Old Information may appear.", Toast.LENGTH_LONG).show();
     }
 
     private void permissionCheck() {
@@ -414,7 +423,7 @@ public class SensorTest extends Activity implements SensorEventListener {
         @Override
         protected String doInBackground(String... params) {
             try {
-                String urlString = "http://172.16.228.173:5000/api";
+                String urlString = "http://172.16.226.121:5000/api";
                 URL url = new URL(urlString);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
