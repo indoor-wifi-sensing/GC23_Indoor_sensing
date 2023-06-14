@@ -135,7 +135,6 @@ public class ClassroomGraphData {
             this.data.addEdge("414", "413", 10);
             this.data.addEdge("413", "412", 10);
             this.data.addEdge("412", "411", 10);
-
             // betweenEB 범위 넓히기
 //            this.data.addEdge("431", "betweenEB", 10);
 //            this.data.addEdge("432", "betweenEB", 10);

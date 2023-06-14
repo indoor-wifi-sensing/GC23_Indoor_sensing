@@ -116,4 +116,9 @@ public class ClassroomGraph {
         return shortestPath;
     }
 
+    public int getShortestDistance(String source, String destination) {
+        Map<String, Integer> distances = dijkstra(source);
+        return distances.get(destination);
+    }
+
 }

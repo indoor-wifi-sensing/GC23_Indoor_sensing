@@ -16,6 +16,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ArrayAdapter;
@@ -79,6 +80,8 @@ public class SensorTest extends Activity implements SensorEventListener {
     private String starts, ends; // 현재 위치, 도착지
     private PermissionSupport permission;
 
+    int leftDistance;    // 남은 미터수 표시
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,8 +99,8 @@ public class SensorTest extends Activity implements SensorEventListener {
         Bundle bundle = intent.getExtras();
         starts = bundle.getString("depart");
         ends = bundle.getString("arrival");
-        startsTxt.setText(starts + "호");
-        endsTxt.setText(ends + "호");
+        startsTxt.setText("현재 위치 : " + starts + "호");
+        endsTxt.setText("목적지 :" + ends + "호");
 
         ClassroomGraphData dataGetHelp = new ClassroomGraphData();
         classInfo = dataGetHelp.inputData();
@@ -179,9 +182,12 @@ public class SensorTest extends Activity implements SensorEventListener {
                                 Toast.makeText(getApplicationContext(), "Network connection not available", Toast.LENGTH_SHORT).show();
                             }
 
+                            leftDistance = classInfo.getShortestDistance(starts, ends); // 남은거리 할당
+
                             List<String> shortestPath1 = classInfo.getShortestPath(starts, ends);
-                            startsTxt.setText(starts + "호");
-                            endsTxt.setText(ends + "호");
+                            startsTxt.setText("현재 위치 : " + starts + "호");
+                            endsTxt.setText("목적지 : " + ends + "호");
+                            distanceTxt.setText("남은 거리 : " + leftDistance + "m\n남은 경로 : " + shortestPath1.toString());
 
                             // 만약 위치가 하나 차이나거나 차이가 없을 경우 도착 메세지 리턴
                             if (shortestPath.size() <= 2) {
@@ -189,7 +195,8 @@ public class SensorTest extends Activity implements SensorEventListener {
                                 return;
                             }
                             NextDirection eee = new NextDirection();
-                            if(shortestPath1.size() == 1) {
+                            // 사이즈 2로 잡아서 옆방까지만 와도 도착 처리해버림
+                            if(shortestPath1.size() == 2) {
                                 Toast.makeText(getApplicationContext(), "목적지 도착", Toast.LENGTH_SHORT).show();
                                 finish();
                                 onDestroy();
@@ -208,7 +215,7 @@ public class SensorTest extends Activity implements SensorEventListener {
                                     Toast.makeText(getApplicationContext(), "Error for return", Toast.LENGTH_SHORT).show();
                                 }
                                 directionTxt.setText(finalDirection + "도");
-                                distanceTxt.setText(shortestPath1.toString());
+                                distanceTxt.setText("남은 거리 : " + leftDistance + "m\n남은 경로 : " + shortestPath1.toString());
                                 targetDegree -= finalDirection;
 
                             }

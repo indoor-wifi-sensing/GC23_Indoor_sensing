@@ -6,10 +6,11 @@
 
     <ImageView
         android:id="@+id/compass_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="302dp"
         android:layout_alignParentTop="true"
-        android:src="@drawable/downarrow" />
+        android:src="@drawable/downarrow"
+        />
 
     <TextView
         android:id="@+id/heading_text"
@@ -17,6 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/compass_image"
         android:text="위치"
+        android:textSize="0dp"
         />
 
     <TextView
@@ -24,7 +26,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/heading_text"
         android:text="현재 위치"
+        android:textColor="@color/black"
         android:id="@+id/starts"
+        android:textSize="50dp"
         />
 
     <TextView
@@ -33,6 +37,8 @@
         android:layout_below="@id/starts"
         android:text="도착지"
         android:id="@+id/ends"
+        android:textSize="50dp"
+        android:textColor="@color/black"
         />
 
     <TextView
@@ -41,6 +47,7 @@
         android:layout_below="@id/ends"
         android:text="현재 방향"
         android:id="@+id/direction"
+        android:textSize="0dp"
         />
 
     <TextView
@@ -49,6 +56,8 @@
         android:layout_below="@id/direction"
         android:text="남은 거리"
         android:id="@+id/distance"
+        android:textColor="@color/black"
+        android:textSize="30dp"
         />
 
 </RelativeLayout>
