@@ -208,6 +208,7 @@ public class SensorTest extends Activity implements SensorEventListener {
                                     Toast.makeText(getApplicationContext(), "Error for return", Toast.LENGTH_SHORT).show();
                                 }
                                 directionTxt.setText(finalDirection + "도");
+                                distanceTxt.setText(shortestPath1.toString());
                                 targetDegree -= finalDirection;
 
                             }
